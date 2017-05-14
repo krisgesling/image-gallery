@@ -1,6 +1,5 @@
 var urlRoot = "https://party.gez.bz/api/";
 
-/*
 function loadSampleData(url, callback)
 {
     var head = document.getElementsByTagName('head')[0];
@@ -14,10 +13,10 @@ function loadSampleData(url, callback)
 
     head.appendChild(script);
 }
-loadSampleData('./js/sample-json-data.json',process)
-*/
+loadSampleData('./js/sample-data-with-likes.json',process)
 
-/*** API CALL ***/
+
+/*** API CALL ***
 var request = new XMLHttpRequest();
 request.open('GET', 'https://party.gez.bz/api/wp-json/wp/v2/posts', true);
 
@@ -39,7 +38,7 @@ request.onerror = function() {
 };
 
 request.send();
-
+*/
 
 
 function process(data) {
@@ -54,6 +53,8 @@ function process(data) {
           .addEventListener('click', changePhoto, false);
   document.getElementById('left-btn')
           .addEventListener('click', changePhoto, false);
+  document.getElementsByClassName('heart')[0]
+          .addEventListener('click', incrementLikes, false);
   document.getElementById('grid-btn')
           .addEventListener('click', toggleGrid, false);
   var allCells = document.getElementsByClassName('img grid');
@@ -149,6 +150,26 @@ function process(data) {
     displaySinglePhoto(photoArray[id]);
   }
 
+
+  function incrementLikes(e) {
+    document.getElementsByClassName('heart')[0]
+                        .getElementsByTagName('img')[0]
+                        .style.width = '3em';
+    document.getElementsByClassName('heart')[0]
+            .getElementsByTagName('span')[0].innerHTML ='Thanks!';
+    //.innerHTML('Thanks');
+    setTimeout(function() {
+      document.getElementsByClassName('heart')[0]
+              .getElementsByTagName('img')[0]
+              .style.width = '2em';
+      setTimeout(function() {
+        document.getElementsByClassName('heart')[0]
+                .getElementsByTagName('span')[0].innerHTML ='';
+      }, 1000);
+    }, 300);
+
+
+  }
 
 
   /*** PHOTO DISPLAY ***/
@@ -267,6 +288,7 @@ function process(data) {
         caption: postImage.caption,
         description: post.better_featured_image.description,
         post_title: post.title.rendered,
+        likes: post.acf ? post.acf.likes : 0,
         id: i
       };
     });
@@ -286,7 +308,12 @@ function gridCell(photo) {
 
 function imgContainer(photo, type) {
   var url = (type == 'grid') ? photo.thumbnail_url : photo.url;
-  var container = `<img class="img ${type}" id=${photo.id} src="${url}"></img>
-                   <img class="heart" src="./css/img/heart-icon.svg"></img>`;
+  var container = `
+                    <img class="img ${type}" id=${photo.id} src="${url}"></img>
+                    <div class="heart">
+                      <span></span>
+                      <img src="./css/img/heart-icon.svg"></img>
+                    </div>
+                  `;
   return container;
 }

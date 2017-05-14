@@ -96,11 +96,23 @@ img.active {
 }
 
 .heart {
-  width: 2em;
   z-index: 12;
   position: absolute;
   top: 3em;
   right: 3em;
+  cursor: pointer;
+}
+.heart>img {
+  position: relative;
+  top: 0.5em;
+  width: 2em;
+  transition: width 1s;
+}
+.heart>span {
+  font-family: helvetica, sans-serif;
+  font-size: 1.3em;
+  font-weight: 700;
+  margin: 1em;
 }
 
 #loader {
