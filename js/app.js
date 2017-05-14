@@ -71,8 +71,8 @@ function process(data) {
   var yDown = null;
 
   function handleTouchStart(evt) {
-      xDown = evt.originalEvent.touches[0].clientX;
-      yDown = evt.originalEvent.touches[0].clientY;
+      xDown = evt.changedTouches[0].clientX;
+      yDown = evt.changedTouches[0].clientY;
   }
 
   function handleTouchMove(evt) {
@@ -80,8 +80,8 @@ function process(data) {
         return;
       }
 
-      var xUp = evt.originalEvent.touches[0].clientX;
-      var yUp = evt.originalEvent.touches[0].clientY;
+      var xUp = evt.changedTouches[0].clientX;
+      var yUp = evt.changedTouches[0].clientY;
 
       var xDiff = xDown - xUp;
       var yDiff = yDown - yUp;
@@ -92,6 +92,7 @@ function process(data) {
           changePhoto(null, 'right');
         } else {
           /* right swipe */
+          changePhoto(null, 'left');
         }
       } else {
         if ( yDiff > 0 ) {
