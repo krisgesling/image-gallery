@@ -1,6 +1,6 @@
 var urlRoot = "https://party.gez.bz/api/";
 
-
+/*
 function loadSampleData(url, callback)
 {
     var head = document.getElementsByTagName('head')[0];
@@ -15,9 +15,9 @@ function loadSampleData(url, callback)
     head.appendChild(script);
 }
 loadSampleData('./js/sample-json-data.json',process)
+*/
 
-
-/*** API CALL ***
+/*** API CALL ***/
 var request = new XMLHttpRequest();
 request.open('GET', 'https://party.gez.bz/api/wp-json/wp/v2/posts', true);
 
@@ -25,6 +25,7 @@ request.onload = function() {
   if (this.status >= 200 && this.status < 400) {
     // Success!
     var data = JSON.parse(this.response);
+    console.log(JSON.stringify(data,null,2));
     process(data);
   } else {
     // Target server reached, but it returned an error
@@ -38,7 +39,7 @@ request.onerror = function() {
 };
 
 request.send();
-*/
+
 
 
 function process(data) {
@@ -63,7 +64,8 @@ function process(data) {
 
 
   // Vanilla swipe gestures
-  // http://stackoverflow.com/questions/2264072/detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
+  // http://stackoverflow.com/questions/2264072/
+  // detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
   document.addEventListener('touchstart', handleTouchStart, false);
   document.addEventListener('touchmove', handleTouchMove, false);
 
@@ -71,39 +73,39 @@ function process(data) {
   var yDown = null;
 
   function handleTouchStart(evt) {
-      xDown = evt.changedTouches[0].clientX;
-      yDown = evt.changedTouches[0].clientY;
+    xDown = evt.changedTouches[0].clientX;
+    yDown = evt.changedTouches[0].clientY;
   }
 
   function handleTouchMove(evt) {
-      if ( ! xDown || ! yDown ) {
-        return;
-      }
+    if ( ! xDown || ! yDown ) {
+      return;
+    }
 
-      var xUp = evt.changedTouches[0].clientX;
-      var yUp = evt.changedTouches[0].clientY;
+    var xUp = evt.changedTouches[0].clientX;
+    var yUp = evt.changedTouches[0].clientY;
 
-      var xDiff = xDown - xUp;
-      var yDiff = yDown - yUp;
+    var xDiff = xDown - xUp;
+    var yDiff = yDown - yUp;
 
-      if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-        if ( xDiff > 0 ) {
-          /* left swipe */
-          changePhoto(null, 'right');
-        } else {
-          /* right swipe */
-          changePhoto(null, 'left');
-        }
+    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+      if ( xDiff > 0 ) {
+        /* left swipe */
+        changePhoto(null, 'right');
       } else {
-        if ( yDiff > 0 ) {
-          /* up swipe */
-        } else {
-          /* down swipe */
-        }
+        /* right swipe */
+        changePhoto(null, 'left');
       }
-      /* reset values */
-      xDown = null;
-      yDown = null;
+    } else {
+      if ( yDiff > 0 ) {
+        /* up swipe */
+      } else {
+        /* down swipe */
+      }
+    }
+    /* reset values */
+    xDown = null;
+    yDown = null;
   }
 
 
@@ -197,7 +199,8 @@ function process(data) {
 
   function preloadImages(array, waitForOtherResources, timeout) {
   // Preload images before display
-  // http://stackoverflow.com/questions/10240110/how-do-you-cache-an-image-in-javascript
+  // http://stackoverflow.com/questions/10240110/
+  // how-do-you-cache-an-image-in-javascript
     var loaded = false,
         list = preloadImages.list ? preloadImages.list : [],
         imgs = array.slice(0),
@@ -255,11 +258,13 @@ function process(data) {
     });
     var photoArray = postsWithFeaturedImg.reverse()
                                          .map(function(post, i) {
+      var postImage = post.better_featured_image;
+      var baseUrl = urlRoot + 'wp-content/uploads/';
       return {
-        url: urlRoot + 'wp-content/uploads/' + post.better_featured_image.media_details.file,
-        thumbnail_url: post.better_featured_image.media_details.sizes.medium.source_url,
-        alt_text: post.better_featured_image.alt_text,
-        caption: post.better_featured_image.caption,
+        url: baseUrl + postImage.media_details.file,
+        thumbnail_url: postImage.media_details.sizes.medium.source_url,
+        alt_text: postImage.alt_text,
+        caption: postImage.caption,
         description: post.better_featured_image.description,
         post_title: post.title.rendered,
         id: i
@@ -281,6 +286,7 @@ function gridCell(photo) {
 
 function imgContainer(photo, type) {
   var url = (type == 'grid') ? photo.thumbnail_url : photo.url;
-  var container = `<img class="img ${type}" id=${photo.id} src="${url}"></img>`;
+  var container = `<img class="img ${type}" id=${photo.id} src="${url}"></img>
+                   <img class="heart" src="./css/img/heart-icon.svg"></img>`;
   return container;
 }

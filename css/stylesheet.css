@@ -95,6 +95,14 @@ img.active {
   display: inline;
 }
 
+.heart {
+  width: 2em;
+  z-index: 12;
+  position: absolute;
+  top: 3em;
+  right: 3em;
+}
+
 #loader {
   border: 16px solid #f3f3f3; /* Light grey */
   border-top: 16px solid #555; /* Blue */
