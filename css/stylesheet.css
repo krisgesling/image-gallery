@@ -45,7 +45,7 @@ header button:hover {
 #display-container button {
   position: absolute;
   z-index: 20;
-  height: 100%;
+  /*height: 100%;*/
   min-width: 15%;
   font-size: 3em;
 }
@@ -60,7 +60,7 @@ button {
   padding: 2em;
 }
 button:hover {
-  background-color: rgba(0,0,0, 0.1);
+  background-color: rgba(150,150,150, 0.1);
   transition: background-color 0.4s;
 }
 
@@ -122,13 +122,34 @@ img.active {
   max-width:70%;
   opacity: 1;
 }
-
+.grid-cell {
+  width: 300px;
+  text-align: center;
+}
 img.grid {
   /*margin: 0.3em;*/
-  box-shadow: 2px 2px #555;
+  box-shadow:  2px 2px 2px #555;
   cursor: pointer;
 }
 
 img.grid:hover {
   opacity: 0.5;
+}
+
+@media (max-width: 800px) {
+  button:hover {
+    background-color: rgba(0,0,0,0);
+  }
+  #display-container>button {
+    bottom: 0;
+    font-size: 2em;
+    padding: 1em;
+  }
+  #grid-container {
+    margin: auto;
+    max-width: 100%
+  }
+  .grid-cell, .img.grid {
+    margin: auto;
+  }
 }
