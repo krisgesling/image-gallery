@@ -41,6 +41,7 @@ request.send();
 */
 
 
+
 function process(data) {
   var activePhotoId = 0;
 
@@ -109,7 +110,22 @@ function process(data) {
     yDown = null;
   }
 
-
+  // Arrow key presses
+  document.onkeydown = keyPressed;
+  function keyPressed(e) {
+    e = e || window.event;
+    switch (e.keyCode) {
+      case 37: // left
+        changePhoto(null, 'left');
+        break;
+      case 39: // right
+        changePhoto(null, 'right');
+        break;
+      case 38: // up
+      case 39: // down
+        break;
+    }
+  }
 
   function changePhoto(e, swipe) {
     var direction = swipe || e.path[0].id.slice(0,-4); // take -btn off the ID
@@ -167,8 +183,6 @@ function process(data) {
                 .getElementsByTagName('span')[0].innerHTML ='';
       }, 1000);
     }, 300);
-
-
   }
 
 
@@ -294,7 +308,6 @@ function process(data) {
     });
     return photoArray;
   }
-
 }
 
 /*** VISUAL COMPONENTS ***/

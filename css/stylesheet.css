@@ -11,14 +11,12 @@ header {
   display: flex;
   justify-content: space-between;
 }
-
 header a {
   color: black;
   margin: 1em 3em;
   opacity: 1;
   text-decoration: none;
 }
-
 header button:hover {
   background-color: white;
 }
@@ -41,7 +39,6 @@ header button:hover {
   justify-content: center;
   opacity: 1;
 }
-
 #display-container button {
   position: absolute;
   z-index: 20;
@@ -67,9 +64,7 @@ button:hover {
 #left-btn {
   left: 0;
 }
-
 #right-btn {
-
   right: 0;
 }
 
@@ -85,12 +80,10 @@ img.single.prev {
   opacity: 0;
   z-index: 11;
 }
-
 img.single.next {
   opacity: 0;
   z-index: 9;
 }
-
 img.active {
   display: inline;
 }
@@ -128,7 +121,6 @@ img.active {
 #loader.hide {
   opacity: 0;
 }
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -147,11 +139,9 @@ img.active {
   text-align: center;
 }
 img.grid {
-  /*margin: 0.3em;*/
   box-shadow:  2px 2px 2px #555;
   cursor: pointer;
 }
-
 img.grid:hover {
   opacity: 0.5;
 }
