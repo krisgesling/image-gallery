@@ -1,4 +1,5 @@
-var urlRoot = "https://party.gez.bz/api/";
+var urlRoot = 'https://party.gez.bz/api/';
+
 
 function loadSampleData(url, callback)
 {
@@ -58,11 +59,13 @@ function process(data) {
           .addEventListener('click', incrementLikes, false);
   document.getElementById('grid-btn')
           .addEventListener('click', toggleGrid, false);
-  var allCells = document.getElementsByClassName('img grid');
+
+  //var allCells = document.getElementsByClassName('grid');
+  var allCells = document.getElementById('grid-container')
+                         .getElementsByTagName('img');
   for (var i=0; i<allCells.length; i++) {
     allCells[i].addEventListener('click', selectPhoto, false);
   }
-
 
 
   // Vanilla swipe gestures
@@ -70,7 +73,6 @@ function process(data) {
   // detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
   document.addEventListener('touchstart', handleTouchStart, false);
   document.addEventListener('touchmove', handleTouchMove, false);
-
   var xDown = null;
   var yDown = null;
 
@@ -127,14 +129,17 @@ function process(data) {
     }
   }
 
+
   function changePhoto(e, swipe) {
     var direction = swipe || e.path[0].id.slice(0,-4); // take -btn off the ID
     var nextPhotoId = activePhotoId;
+
     if (direction == 'right' && activePhotoId < photoArray.length-1) {
       nextPhotoId++;
     } else if (direction == 'left' && activePhotoId > 0) {
       nextPhotoId--;
     }
+
     if (nextPhotoId != activePhotoId) {
       activePhotoId = nextPhotoId;
       displaySinglePhoto(photoArray[activePhotoId]);
@@ -142,28 +147,40 @@ function process(data) {
   }
 
 
-  function toggleGrid(e) {
-    var hide, show;
-    if (e.path[0].className == 'icon') {
-      hide = 'none';
-      show = 'flex';
-    } else {
-      hide = 'flex';
-      show = 'none';
+  function toggleHide(targetDesc, hide) {
+  // Sets the target element to hide or display
+  // If hide arg is undefined then detect and switch
+    var target;
+    switch (targetDesc.charAt(0)) {
+      case '.':
+        target = document.getElementsByClassName(targetDesc.slice(1))[0];
+        break;
+      case '#':
+        target = document.getElementById(targetDesc.slice(1));
+        break;
+      default:
+        target = document.getElementsByTagName(targetDesc);
+        break;
     }
-    document.getElementById('grid-btn')
-            .style.display = hide;
-    document.getElementById('display-container')
-            .style.display = hide;
-    document.getElementById('grid-container')
-            .style.display = show;
+
+    if (!target && !target.id && !target.className) {
+      return console.error(`toggleHide() cannot find target element: ${targetDesc}`);
+    };
+
+    var isHidden = (' ' + target.className + ' ').indexOf(' hide ') >= 0;
+    if (hide == 'undefined' || hide != isHidden) {
+      target.classList.toggle('hide');
+      return !isHidden;
+    };
   }
 
-  function selectPhoto(e) {
-    let id = e.path[0].id;
-    toggleGrid(e);
-    activePhotoId = id;
-    displaySinglePhoto(photoArray[id]);
+  function toggleGrid(e) {
+    toggleHide('#grid-btn');
+    toggleHide('#grid-container');
+    // changes display attribute as easiest way to clear UI for clicks etc
+    var hideDisplay = toggleHide('#display-container') ? 'none' : 'flex';
+    document.getElementById('display-container')
+            .style.display = hideDisplay;
   }
 
 
@@ -186,13 +203,22 @@ function process(data) {
   }
 
 
+  function selectPhoto(e) {
+    var id = e.path[0].id;
+    toggleGrid(e);
+    activePhotoId = id;
+    displaySinglePhoto(photoArray[id]);
+  }
+
+
   /*** PHOTO DISPLAY ***/
+  // TODO Refactor!
   function displaySinglePhoto(photo) {
-    var displayContainer = document.getElementById('single-image-container');
-    var activePhotoArr = displayContainer.getElementsByTagName('img');
-    var activePhoto = activePhotoArr[0];
+    var singleImgCont = document.getElementById('single-image-container');
+    var activePhoto = singleImgCont.getElementsByTagName('img')[0];
+
     if (activePhoto) {
-      activePhoto.className += ' prev';
+      toggleHide('#single-image-container');
       setTimeout(function() {
         activePhoto.src = photo.url;
         // Test if img loaded, reveal once it has.
@@ -200,11 +226,11 @@ function process(data) {
           reveal.i = reveal.i ? reveal.i : 0;
           reveal.i++;
           if (activePhoto.complete) {
-            document.getElementById('loader').className = 'hide';
-            activePhoto.className = activePhoto.className.slice(0,-5);
+            toggleHide('#loader', true);
+            toggleHide('#single-image-container');
           } else {
-            document.getElementById('loader').className = '';
-            if (reveal.i < 5) {
+            toggleHide('#loader', false);
+            if (reveal.i < 10) {
               setTimeout(function() {
                 reveal();
               }, 500);
@@ -212,10 +238,10 @@ function process(data) {
             reveal.i = 0;
           }
         })();
-      }, 1000);
+      }, 800);
 
     } else {
-      displayContainer.innerHTML = this.imgContainer(photo, 'single');
+      singleImgCont.innerHTML = this.imgContainer(photo);
     }
     preloadImages(neighbourImages(activePhotoId), true);
   }
@@ -241,6 +267,7 @@ function process(data) {
         imgs = array.slice(0),
         t = timeout || 10*1000,
         timer;
+
     if (!waitForOtherResources || document.readyState === 'complete') {
       loadNow();
     } else {
@@ -253,6 +280,7 @@ function process(data) {
       // then preload the images anyway after some timeout time
       timer = setTimeout(loadNow, t);
     }
+
     function loadNow() {
       if (!loaded) {
         loaded = true;
@@ -271,13 +299,14 @@ function process(data) {
         }
       }
     }
+
   }
 
 
   function displayPhotoGrid(photoArray) {
     photoArray.forEach( (photo) => {
-      var grid = document.getElementById('grid-container');
-      grid.innerHTML += gridCell(photo);
+      var gridContainer = document.getElementById('grid-container');
+      gridContainer.innerHTML += gridCell(photo);
     });
   }
 
@@ -321,12 +350,16 @@ function gridCell(photo) {
 
 function imgContainer(photo, type) {
   var url = (type == 'grid') ? photo.thumbnail_url : photo.url;
-  var container = `
-                    <img class="img ${type}" id=${photo.id} src="${url}"></img>
-                    <div class="heart">
-                      <span></span>
-                      <img src="./css/img/heart-icon.svg"></img>
-                    </div>
+  var img = `
+                    <img id=${photo.id} src="${url}"></img>
                   `;
-  return container;
+  if (type != 'grid') {
+    img += `
+                  <div class="heart">
+                    <span></span>
+                    <img src="./css/img/heart-icon.svg"></img>
+                  </div>
+                `;
+  }
+  return img;
 }
