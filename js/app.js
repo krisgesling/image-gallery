@@ -187,9 +187,9 @@ function process(data) {
   function incrementLikes(e) {
     var imgContIndex = e.path[0].tagName == 'DIV' ? '1' : '2';
     var incrementId = e.path[imgContIndex].childNodes[1].id;
-    // console.log(_paq);
-    _paq.push(['trackEvent', 'Likes', incrementId]);
-
+    console.log(incrementId);
+    _paq.push(['trackEvent', 'Likes', 'heart', incrementId]);
+    console.log('complete');
      // then do animation stuff
     document.getElementsByClassName('heart')[0]
                         .getElementsByTagName('img')[0]
