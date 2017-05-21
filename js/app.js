@@ -44,10 +44,10 @@ request.send();
 
 
 function process(data) {
-  var activePhotoId = 0;
+  var activePhotoIndex = 0;
 
   var photoArray = ingestAllPhotos(data);
-  displaySinglePhoto(photoArray[activePhotoId]);
+  displaySinglePhoto(photoArray[activePhotoIndex]);
   displayPhotoGrid(photoArray, 'grid');
 
   /*** EVENT HANDLERS ***/
@@ -132,17 +132,17 @@ function process(data) {
 
   function changePhoto(e, swipe) {
     var direction = swipe || e.path[0].id.slice(0,-4); // take -btn off the ID
-    var nextPhotoId = activePhotoId;
+    var nextPhotoId = activePhotoIndex;
 
-    if (direction == 'right' && activePhotoId < photoArray.length-1) {
+    if (direction == 'right' && activePhotoIndex < photoArray.length-1) {
       nextPhotoId++;
-    } else if (direction == 'left' && activePhotoId > 0) {
+    } else if (direction == 'left' && activePhotoIndex > 0) {
       nextPhotoId--;
     }
 
-    if (nextPhotoId != activePhotoId) {
-      activePhotoId = nextPhotoId;
-      displaySinglePhoto(photoArray[activePhotoId]);
+    if (nextPhotoId != activePhotoIndex) {
+      activePhotoIndex = nextPhotoId;
+      displaySinglePhoto(photoArray[activePhotoIndex]);
     }
   }
 
@@ -185,6 +185,8 @@ function process(data) {
 
 
   function incrementLikes(e) {
+    console.log(e);
+    // _paq.push(['trackEvent', 'Likes', 'heart', e.id]);
     document.getElementsByClassName('heart')[0]
                         .getElementsByTagName('img')[0]
                         .style.width = '3em';
@@ -204,10 +206,10 @@ function process(data) {
 
 
   function selectPhoto(e) {
-    var id = e.path[0].id;
+    var index = e.path[0].attributes.key.value;
     toggleGrid(e);
-    activePhotoId = id;
-    displaySinglePhoto(photoArray[id]);
+    activePhotoIndex = index;
+    displaySinglePhoto(photoArray[index]);
   }
 
 
@@ -243,7 +245,7 @@ function process(data) {
     } else {
       singleImgCont.innerHTML = this.imgContainer(photo);
     }
-    preloadImages(neighbourImages(activePhotoId), true);
+    preloadImages(neighbourImages(activePhotoIndex), true);
   }
 
   function neighbourImages(id) {
@@ -332,7 +334,8 @@ function process(data) {
         description: post.better_featured_image.description,
         post_title: post.title.rendered,
         likes: post.acf ? post.acf.likes : 0,
-        id: i
+        index: i,
+        id: post.id
       };
     });
     return photoArray;
@@ -351,7 +354,7 @@ function gridCell(photo) {
 function imgContainer(photo, type) {
   var url = (type == 'grid') ? photo.thumbnail_url : photo.url;
   var img = `
-                    <img id=${photo.id} src="${url}"></img>
+                    <img id=${photo.id} key=${photo.index} src="${url}"></img>
                   `;
   if (type != 'grid') {
     img += `
