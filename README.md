@@ -7,9 +7,9 @@ Included is a local JSON file of a few posts.
 Images are still fetched remotely.
 
 ## To do
-- [ ] Likes
+- [x] Likes
   - [x] hide heart on grid view
-  - [ ] hookup heart counter
+  - [x] hookup heart counter
 - [ ] Comments
   - [ ] design comment box
   - [ ] get comments from JSON
