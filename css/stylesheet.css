@@ -73,10 +73,6 @@ button:hover {
   right: 0;
 }
 
-/*.active {
-  display: inline;
-}*/
-
 .heart {
   z-index: 12;
   position: absolute;
@@ -108,6 +104,7 @@ button:hover {
   opacity: 1;
   transition: opacity 0.3s ease;
 }
+
 .hide {
   opacity: 0 !important;
 }
