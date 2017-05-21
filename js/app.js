@@ -185,8 +185,12 @@ function process(data) {
 
 
   function incrementLikes(e) {
-    console.log(e);
-    // _paq.push(['trackEvent', 'Likes', 'heart', e.id]);
+    var imgContIndex = e.path[0].tagName == 'DIV' ? '1' : '2';
+    var incrementId = e.path[imgContIndex].childNodes[1].id;
+    // console.log(_paq);
+    _paq.push(['trackEvent', 'Likes', incrementId]);
+
+     // then do animation stuff
     document.getElementsByClassName('heart')[0]
                         .getElementsByTagName('img')[0]
                         .style.width = '3em';
@@ -223,6 +227,8 @@ function process(data) {
       toggleHide('#single-image-container');
       setTimeout(function() {
         activePhoto.src = photo.url;
+        activePhoto.id = photo.id;
+        activePhoto.key = photo.index;
         // Test if img loaded, reveal once it has.
         (function reveal() {
           reveal.i = reveal.i ? reveal.i : 0;
@@ -248,11 +254,11 @@ function process(data) {
     preloadImages(neighbourImages(activePhotoIndex), true);
   }
 
-  function neighbourImages(id) {
+  function neighbourImages(index) {
     // TODO optimise order of preloading images
     var toBeLoaded = [];
-    for (var i = id-1; i < id+2; i++) {
-      if (i!=id && photoArray[i]) {
+    for (var i = index-1; i < index+2; i++) {
+      if (i!=index && photoArray[i]) {
         toBeLoaded.push(photoArray[i].url);
       }
     }
@@ -358,7 +364,7 @@ function imgContainer(photo, type) {
                   `;
   if (type != 'grid') {
     img += `
-                  <div class="heart">
+                  <div class="heart" id="h${photo.id}">
                     <span></span>
                     <img src="./css/img/heart-icon.svg"></img>
                   </div>
