@@ -187,9 +187,13 @@ function process(data) {
   function incrementLikes(e) {
     var imgContIndex = e.path[0].tagName == 'DIV' ? '1' : '2';
     var incrementId = e.path[imgContIndex].childNodes[1].id;
-    console.log(incrementId);
-    _paq.push(['trackEvent', 'Likes', 'heart', incrementId]);
-    console.log('complete');
+    // console.log(incrementId);
+    // _paq.push(['trackEvent', 'Likes', 'heart', incrementId]);
+    // console.log('complete');
+
+    // trying Google Analytics
+    ga('send', 'event', 'Likes', 'Heart', incrementId);
+
      // then do animation stuff
     document.getElementsByClassName('heart')[0]
                         .getElementsByTagName('img')[0]
