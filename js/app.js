@@ -175,7 +175,9 @@ function process(data) {
 
   function toggleGrid(e) {
     toggleHide('#grid-btn');
-    toggleHide('#grid-container');
+    var gridDisplayProp = toggleHide('#grid-container') ? 'none' : 'flex';
+    document.getElementById('grid-container')
+            .style.display = gridDisplayProp;
     // changes display attribute as easiest way to clear UI for clicks etc
     var hideDisplay = toggleHide('#display-container') ? 'none' : 'flex';
     document.getElementById('display-container')

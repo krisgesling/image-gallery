@@ -111,6 +111,7 @@ button:hover {
 
 .hide {
   opacity: 0 !important;
+  height: 0px;
 }
 
 @keyframes spin {
@@ -119,7 +120,7 @@ button:hover {
 }
 
 #grid-container {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   justify-content: space-between;
   margin: 4em auto;
