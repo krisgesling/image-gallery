@@ -15,7 +15,10 @@ Images are still fetched remotely.
   - [ ] get comments from JSON
   - [ ] post new comment
   - [ ] delete comment??
-- [ ] Refactoring
+- [ ] Bugs and Refactoring
   - [x] Consistent show/hide
+  - [x] Fix the errors showing in the console, even if they aren't breaking anything...
+  - [ ] clicking on single image takes you to grid-view... - display: none fixes....
+  - [ ] grid-view height maintained when not visible.
 - [ ] CSS
   - [ ] remove all id's from css where possible eg class of hideable instead of setting each id with an opacity.

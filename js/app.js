@@ -10,7 +10,7 @@ function loadSampleData(url, callback)
 
     // Then bind the event to the callback function.
     script.onreadystatechange = callback;
-    script.onload = callback;
+    //script.onload = callback;
 
     head.appendChild(script);
 }
@@ -45,7 +45,6 @@ request.send();
 
 function process(data) {
   var activePhotoIndex = 0;
-
   var photoArray = ingestAllPhotos(data);
   displaySinglePhoto(photoArray[activePhotoIndex]);
   displayPhotoGrid(photoArray, 'grid');

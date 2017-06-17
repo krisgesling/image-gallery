@@ -773,6 +773,6 @@ let sampleData = [
       ]
     }
   }
-]
+];
 
 process(sampleData);
