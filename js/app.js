@@ -17,7 +17,7 @@ var urlRoot = 'https://party.gez.bz/api/';
 // loadSampleData('./js/sample-data-with-likes.json',process)
 
 
-*** API CALL ***
+/*** API CALL ***/
 var request = new XMLHttpRequest();
 request.open('GET', 'https://party.gez.bz/api/wp-json/wp/v2/posts', true);
 
