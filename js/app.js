@@ -25,7 +25,7 @@ request.onload = function() {
   if (this.status >= 200 && this.status < 400) {
     // Success!
     var data = JSON.parse(this.response);
-    console.log(JSON.stringify(data,null,2));
+    // console.log(JSON.stringify(data,null,2));
     process(data);
   } else {
     // Target server reached, but it returned an error
