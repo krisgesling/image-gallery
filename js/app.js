@@ -1,23 +1,23 @@
 var urlRoot = 'https://party.gez.bz/api/';
 
 
-function loadSampleData(url, callback)
-{
-    var head = document.getElementsByTagName('head')[0];
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = url;
+// function loadSampleData(url, callback)
+// {
+//     var head = document.getElementsByTagName('head')[0];
+//     var script = document.createElement('script');
+//     script.type = 'text/javascript';
+//     script.src = url;
+//
+//     // Then bind the event to the callback function.
+//     script.onreadystatechange = callback;
+//     //script.onload = callback;
+//
+//     head.appendChild(script);
+// }
+// loadSampleData('./js/sample-data-with-likes.json',process)
 
-    // Then bind the event to the callback function.
-    script.onreadystatechange = callback;
-    //script.onload = callback;
 
-    head.appendChild(script);
-}
-loadSampleData('./js/sample-data-with-likes.json',process)
-
-
-/*** API CALL ***
+*** API CALL ***
 var request = new XMLHttpRequest();
 request.open('GET', 'https://party.gez.bz/api/wp-json/wp/v2/posts', true);
 
@@ -39,7 +39,7 @@ request.onerror = function() {
 };
 
 request.send();
-*/
+
 
 
 
