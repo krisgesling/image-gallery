@@ -136,9 +136,10 @@ button:hover {
   opacity: 1;
 }
 .grid-cell {
-  width: 300px;
+  margin: auto;
   padding: 10px 0;
   text-align: center;
+  width: 300px;
 }
 #grid-container img {
   box-shadow:  2px 2px 2px #555;
