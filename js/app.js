@@ -19,7 +19,7 @@ var urlRoot = 'https://party.gez.bz/api/';
 
 /*** API CALL ***/
 var request = new XMLHttpRequest();
-request.open('GET', 'https://party.gez.bz/api/wp-json/wp/v2/posts', true);
+request.open('GET', 'https://party.gez.bz/api/wp-json/wp/v2/posts?per_page=100', true);
 
 request.onload = function() {
   if (this.status >= 200 && this.status < 400) {
