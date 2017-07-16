@@ -332,8 +332,16 @@ function process(data) {
                                          .map(function(post, i) {
       var postImage = post.better_featured_image;
       var baseUrl = urlRoot + 'wp-content/uploads/';
+
+      // Test size of window to determine full size image
+      var maxViewportWidth = (window.innerHeight > window.innerWidth) ?
+        window.innerHeight : window.innerWidth;
+      var imageUrl = (maxViewportWidth > 1024) ?
+        baseUrl + postImage.media_details.file :
+        postImage.media_details.sizes.large.source_url;
+
       return {
-        url: baseUrl + postImage.media_details.file,
+        url: imageUrl,
         thumbnail_url: postImage.media_details.sizes.medium.source_url,
         alt_text: postImage.alt_text,
         caption: postImage.caption,
