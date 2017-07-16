@@ -354,6 +354,11 @@ function process(data) {
     });
     return photoArray;
   }
+
+  // Hide url bar on mobile
+  if(navigator.userAgent.match(/Android/i)){
+    window.scrollTo(0,1);
+  }
 }
 
 /*** VISUAL COMPONENTS ***/
