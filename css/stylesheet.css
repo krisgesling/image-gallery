@@ -137,6 +137,7 @@ button:hover {
 }
 .grid-cell {
   width: 300px;
+  padding: 10px 0;
   text-align: center;
 }
 #grid-container img {
