@@ -1,4 +1,5 @@
 var urlRoot = 'https://party.gez.bz/api/';
+var currentPage = 1;
 
 
 // function loadSampleData(url, callback)
@@ -18,29 +19,41 @@ var urlRoot = 'https://party.gez.bz/api/';
 
 
 /*** API CALL ***/
-var request = new XMLHttpRequest();
-request.open('GET', 'https://party.gez.bz/api/wp-json/wp/v2/posts?per_page=100', true);
+function apiCall(url, perPage = 20, page = currentPage) {
+  var request = new XMLHttpRequest();
+  var requestUrl = url+'?order=asc&per_page='+perPage+'&page='+page;
+  request.open('GET', requestUrl , true);
 
-request.onload = function() {
-  if (this.status >= 200 && this.status < 400) {
-    // Success!
-    var data = JSON.parse(this.response);
-    // console.log(JSON.stringify(data,null,2));
-    process(data);
-  } else {
-    // Target server reached, but it returned an error
-    console.error('Target server reached, but it returned an error');
-  }
-};
+  request.onload = function() {
+    if (this.status >= 200 && this.status < 400) {
+      // Success!
+      var data = JSON.parse(this.response);
+      // console.log(JSON.stringify(data,null,2));
+      process(data);
+    } else {
+      // Target server reached, but it returned an error
+      console.error('Target server reached, but it returned an error');
+    }
+  };
 
-request.onerror = function() {
-  // There was a connection error of some sort
-  console.error('Connection error');
-};
+  request.onerror = function() {
+    // There was a connection error of some sort
+    console.error('Connection error');
+  };
 
-request.send();
+  request.send();
+}
+apiCall('https://party.gez.bz/api/wp-json/wp/v2/posts');
 
-
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 
 
 function process(data) {
@@ -312,9 +325,28 @@ function process(data) {
 
 
   function displayPhotoGrid(photoArray) {
+    var gridContainer = document.getElementById('grid-container');
     photoArray.forEach( (photo) => {
-      var gridContainer = document.getElementById('grid-container');
       gridContainer.innerHTML += gridCell(photo);
+    });
+    var scrollFired = false;
+    // Trigger extra load when scrolling to the bottom.
+    window.addEventListener('scroll', function(event) {
+      // console.log(event);
+      var element = document.body;
+      // console.log(element.scrollHeight, element.scrollTop, element.clientHeight);
+      //if (element.scrollHeight - element.scrollTop < element.clientHeight)
+      if (element.scrollTop + window.innerHeight >= element.clientHeight) {
+        if (scrollFired === false) {
+          console.log('1: ',scrollFired);
+          scrollFired = true;
+          console.log('2: ',scrollFired);
+          currentPage++;
+          console.log(currentPage);
+          apiCall('https://party.gez.bz/api/wp-json/wp/v2/posts');
+          setTimeout(function(){scrollFired=false;console.log('3: ',scrollFired);},2000)
+        }
+      }
     });
   }
 
@@ -328,8 +360,7 @@ function process(data) {
     var postsWithFeaturedImg = data.filter(function(post) {
       return post.better_featured_image;
     });
-    var photoArray = postsWithFeaturedImg.reverse()
-                                         .map(function(post, i) {
+    var photoArray = postsWithFeaturedImg.map(function(post, i) {
       var postImage = post.better_featured_image;
       var baseUrl = urlRoot + 'wp-content/uploads/';
 

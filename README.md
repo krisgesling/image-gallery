@@ -20,5 +20,6 @@ Images are still fetched remotely.
   - [x] Fix the errors showing in the console, even if they aren't breaking anything...
   - [x] clicking on single image takes you to grid-view... - display: none fixes....
   - [x] grid-view height maintained when not visible.
+  - [ ] fully load first image before any others.
 - [ ] CSS
   - [ ] remove all id's from css where possible eg class of hideable instead of setting each id with an opacity.
