@@ -119,7 +119,7 @@ button:hover {
 
 .hide {
   opacity: 0 !important;
-  height: 0px;
+  height: 0;
 }
 
 @keyframes spin {

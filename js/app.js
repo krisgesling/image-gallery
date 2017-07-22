@@ -130,7 +130,7 @@ function process(data) {
 
 
   function changePhoto(e, swipe) {
-    var direction = swipe || e.path[0].id.slice(0,-4); // take -btn off the ID
+    var direction = swipe || e.target.id.slice(0,-4); // take -btn off the ID
     var nextPhotoId = activePhotoIndex;
 
     if (direction == 'right' && activePhotoIndex < photoArray.length-1) {

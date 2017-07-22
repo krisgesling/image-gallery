@@ -1,4 +1,4 @@
-let sampleData = [
+var sampleData = [
   {
     "id": 53,
     "date": "2017-05-13T05:53:35",
