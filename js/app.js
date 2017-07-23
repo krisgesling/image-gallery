@@ -1,26 +1,8 @@
 var urlRoot = 'https://party.gez.bz/api/';
 
-
-// function loadSampleData(url, callback)
-// {
-//     var head = document.getElementsByTagName('head')[0];
-//     var script = document.createElement('script');
-//     script.type = 'text/javascript';
-//     script.src = url;
-//
-//     // Then bind the event to the callback function.
-//     script.onreadystatechange = callback;
-//     //script.onload = callback;
-//
-//     head.appendChild(script);
-// }
-// loadSampleData('./js/sample-data-with-likes.json',process)
-
-
 /*** API CALL ***/
 var request = new XMLHttpRequest();
 request.open('GET', 'https://party.gez.bz/api/wp-json/wp/v2/posts?per_page=100', true);
-
 request.onload = function() {
   if (this.status >= 200 && this.status < 400) {
     // Success!
@@ -32,15 +14,11 @@ request.onload = function() {
     console.error('Target server reached, but it returned an error');
   }
 };
-
 request.onerror = function() {
   // There was a connection error of some sort
   console.error('Connection error');
 };
-
 request.send();
-
-
 
 
 function process(data) {
@@ -59,75 +37,13 @@ function process(data) {
   document.getElementById('grid-btn')
           .addEventListener('click', toggleGrid, false);
 
-  //var allCells = document.getElementsByClassName('grid');
   var allCells = document.getElementById('grid-container')
                          .getElementsByTagName('img');
   for (var i=0; i<allCells.length; i++) {
     allCells[i].addEventListener('click', selectPhoto, false);
   }
 
-
-  // Vanilla swipe gestures
-  // http://stackoverflow.com/questions/2264072/
-  // detect-a-finger-swipe-through-javascript-on-the-iphone-and-android
-  document.addEventListener('touchstart', handleTouchStart, false);
-  document.addEventListener('touchmove', handleTouchMove, false);
-  var xDown = null;
-  var yDown = null;
-
-  function handleTouchStart(evt) {
-    xDown = evt.changedTouches[0].clientX;
-    yDown = evt.changedTouches[0].clientY;
-  }
-
-  function handleTouchMove(evt) {
-    if ( ! xDown || ! yDown ) {
-      return;
-    }
-
-    var xUp = evt.changedTouches[0].clientX;
-    var yUp = evt.changedTouches[0].clientY;
-
-    var xDiff = xDown - xUp;
-    var yDiff = yDown - yUp;
-
-    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-      if ( xDiff > 0 ) {
-        /* left swipe */
-        changePhoto(null, 'right');
-      } else {
-        /* right swipe */
-        changePhoto(null, 'left');
-      }
-    } else {
-      if ( yDiff > 0 ) {
-        /* up swipe */
-      } else {
-        /* down swipe */
-      }
-    }
-    /* reset values */
-    xDown = null;
-    yDown = null;
-  }
-
-  // Arrow key presses
-  document.onkeydown = keyPressed;
-  function keyPressed(e) {
-    e = e || window.event;
-    switch (e.keyCode) {
-      case 37: // left
-        changePhoto(null, 'left');
-        break;
-      case 39: // right
-        changePhoto(null, 'right');
-        break;
-      case 38: // up
-      case 39: // down
-        break;
-    }
-  }
-
+  vanillaSwipe(changePhoto); // finger swipe and arrow key change
 
   function changePhoto(e, swipe) {
     var direction = swipe || e.target.id.slice(0,-4); // take -btn off the ID
