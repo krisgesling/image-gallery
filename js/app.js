@@ -1,29 +1,10 @@
 var urlRoot = 'https://party.gez.bz/api/';
 
-/*** API CALL ***/
-var request = new XMLHttpRequest();
-request.open('GET', 'https://party.gez.bz/api/wp-json/wp/v2/posts?per_page=100', true);
-request.onload = function() {
-  if (this.status >= 200 && this.status < 400) {
-    // Success!
-    var data = JSON.parse(this.response);
-    // console.log(JSON.stringify(data,null,2));
-    process(data);
-  } else {
-    // Target server reached, but it returned an error
-    console.error('Target server reached, but it returned an error');
-  }
-};
-request.onerror = function() {
-  // There was a connection error of some sort
-  console.error('Connection error');
-};
-request.send();
+process(localJSON);
 
-
-function process(data) {
+function process(photoArray) {
   var activePhotoIndex = 0;
-  var photoArray = ingestAllPhotos(data);
+  // var photoArray = ingestAllPhotos(data);
   displaySinglePhoto(photoArray[activePhotoIndex]);
   displayPhotoGrid(photoArray, 'grid');
 
@@ -142,7 +123,8 @@ function process(data) {
     if (activePhoto) {
       toggleHide('#single-image-container');
       setTimeout(function() {
-        activePhoto.src = photo.url;
+        activePhoto.src = (getScreenSize() > 1024) ?
+          photo.url : photo.medium_url;
         activePhoto.id = photo.id;
         activePhoto.key = photo.index;
         // Test if img loaded, reveal once it has.
@@ -175,7 +157,9 @@ function process(data) {
     var toBeLoaded = [];
     for (var i = index-1; i < index+2; i++) {
       if (i!=index && photoArray[i]) {
-        toBeLoaded.push(photoArray[i].url);
+        var url = (getScreenSize() > 1024) ?
+          photoArray[i].url : photoArray[i].medium_url;
+        toBeLoaded.push(url);
       }
     }
     return toBeLoaded;
@@ -233,46 +217,16 @@ function process(data) {
       gridContainer.innerHTML += gridCell(photo);
     });
   }
-
-
-  function ingestAllPhotos(data) {
-    if (!Array.isArray(data)) {
-      return console.error(
-        'Type error: Photo data for ingestion not delivered as an Array'
-      );
-    }
-    var postsWithFeaturedImg = data.filter(function(post) {
-      return post.better_featured_image;
-    });
-    var photoArray = postsWithFeaturedImg.reverse()
-                                         .map(function(post, i) {
-      var postImage = post.better_featured_image;
-      var baseUrl = urlRoot + 'wp-content/uploads/';
-
-      // Test size of window to determine full size image
-      var maxViewportWidth = (window.innerHeight > window.innerWidth) ?
-        window.innerHeight : window.innerWidth;
-      var imageUrl = (maxViewportWidth > 1024) ?
-        baseUrl + postImage.media_details.file :
-        postImage.media_details.sizes.large.source_url;
-
-      return {
-        url: imageUrl,
-        thumbnail_url: postImage.media_details.sizes.medium.source_url,
-        alt_text: postImage.alt_text,
-        caption: postImage.caption,
-        description: post.better_featured_image.description,
-        post_title: post.title.rendered,
-        likes: post.acf ? post.acf.likes : 0,
-        index: i,
-        id: post.id
-      };
-    });
-    return photoArray;
-  }
 }
 
 /*** VISUAL COMPONENTS ***/
+function getScreenSize() {
+  // Test size of window to determine full size image
+  var maxViewportWidth = (window.innerHeight > window.innerWidth) ?
+    window.innerHeight : window.innerWidth;
+  return maxViewportWidth;
+}
+
 function gridCell(photo) {
   var cell =
     `<div class="grid-cell">
@@ -282,7 +236,8 @@ function gridCell(photo) {
 }
 
 function imgContainer(photo, type) {
-  var url = (type == 'grid') ? photo.thumbnail_url : photo.url;
+  var url = (type == 'grid') ? photo.thumbnail_url :
+    (getScreenSize() > 1024) ? photo.url : photo.medium_url;
   var img = `
                     <img id=${photo.id} key=${photo.index} src="${url}"></img>
                   `;
