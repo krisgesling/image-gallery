@@ -4,7 +4,6 @@ process(localJSON);
 
 function process(photoArray) {
   var activePhotoIndex = 0;
-  // var photoArray = ingestAllPhotos(data);
   displaySinglePhoto(photoArray[activePhotoIndex]);
   displayPhotoGrid(photoArray, 'grid');
 
@@ -17,13 +16,11 @@ function process(photoArray) {
           .addEventListener('click', incrementLikes, false);
   document.getElementById('grid-btn')
           .addEventListener('click', toggleGrid, false);
-
   var allCells = document.getElementById('grid-container')
                          .getElementsByTagName('img');
   for (var i=0; i<allCells.length; i++) {
     allCells[i].addEventListener('click', selectPhoto, false);
   }
-
   vanillaSwipe(changePhoto); // finger swipe and arrow key change
 
   function changePhoto(e, swipe) {
@@ -41,7 +38,6 @@ function process(photoArray) {
       displaySinglePhoto(photoArray[activePhotoIndex]);
     }
   }
-
 
   function toggleHide(targetDesc, hide) {
   // Sets the target element to hide or display
@@ -93,7 +89,6 @@ function process(photoArray) {
                         .style.width = '3em';
     document.getElementsByClassName('heart')[0]
             .getElementsByTagName('span')[0].innerHTML ='Thanks!';
-    //.innerHTML('Thanks');
     setTimeout(function() {
       document.getElementsByClassName('heart')[0]
               .getElementsByTagName('img')[0]
@@ -105,14 +100,12 @@ function process(photoArray) {
     }, 300);
   }
 
-
   function selectPhoto(e) {
     var index = e.path[0].attributes.key.value;
     toggleGrid(e);
     activePhotoIndex = index;
     displaySinglePhoto(photoArray[index]);
   }
-
 
   /*** PHOTO DISPLAY ***/
   // TODO Refactor!
@@ -153,7 +146,7 @@ function process(photoArray) {
   }
 
   function neighbourImages(index) {
-    // TODO optimise order of preloading images
+    index = Number(index)
     var toBeLoaded = [];
     for (var i = index-1; i < index+2; i++) {
       if (i!=index && photoArray[i]) {
@@ -164,7 +157,6 @@ function process(photoArray) {
     }
     return toBeLoaded;
   }
-
 
   function preloadImages(array, waitForOtherResources, timeout) {
   // Preload images before display
@@ -207,9 +199,7 @@ function process(photoArray) {
         }
       }
     }
-
   }
-
 
   function displayPhotoGrid(photoArray) {
     photoArray.forEach( (photo) => {
