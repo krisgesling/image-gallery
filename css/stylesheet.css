@@ -1,3 +1,5 @@
+
+@import url('https://fonts.googleapis.com/css?family=Scope+One');
 body {
   background-color: #fafafa;
 }
@@ -132,6 +134,22 @@ button:hover {
   max-width:70%;
   opacity: 1;
 }
+
+#grid-header {
+  margin: 0 15px;
+  width: 100%;
+}
+h1 {
+  font-family: Scope One;
+  font-size: 3em;
+  font-weight: 500;
+}
+p {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1.3em;
+  font-weight: 500;
+}
+
 .grid-cell {
   margin: auto;
   padding: 10px 0;
