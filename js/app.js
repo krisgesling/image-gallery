@@ -1,5 +1,3 @@
-var urlRoot = 'https://party.gez.bz/api/';
-
 process(localJSON);
 
 function process(photoArray) {
@@ -56,7 +54,8 @@ function process(photoArray) {
     }
 
     if (!target && !target.id && !target.className) {
-      return console.error(`toggleHide() cannot find target element: ${targetDesc}`);
+      return console.error
+      (`toggleHide() cannot find target element: ${targetDesc}`);
     };
 
     var isHidden = (' ' + target.className + ' ').indexOf(' hide ') >= 0;
@@ -83,20 +82,12 @@ function process(photoArray) {
     var incrementId = e.path[imgContIndex].childNodes[1].id;
     ga('send', 'event', 'Likes', 'Heart', incrementId);
 
-     // then do animation stuff
-    document.getElementsByClassName('heart')[0]
-                        .getElementsByTagName('img')[0]
-                        .style.width = '3em';
-    document.getElementsByClassName('heart')[0]
-            .getElementsByTagName('span')[0].innerHTML ='Thanks!';
+    // then do animation stuff
+    var heartImg = document.getElementsByClassName('heart')[0]
+                           .getElementsByTagName('img')[0];
+    heartImg.classList.add('liked');
     setTimeout(function() {
-      document.getElementsByClassName('heart')[0]
-              .getElementsByTagName('img')[0]
-              .style.width = '2em';
-      setTimeout(function() {
-        document.getElementsByClassName('heart')[0]
-                .getElementsByTagName('span')[0].innerHTML ='';
-      }, 1000);
+      heartImg.classList.remove('liked')
     }, 300);
   }
 
@@ -228,16 +219,13 @@ function gridCell(photo) {
 function imgContainer(photo, type) {
   var url = (type == 'grid') ? photo.thumbnail_url :
     (getScreenSize() > 1024) ? photo.url : photo.medium_url;
-  var img = `
-                    <img id=${photo.id} key=${photo.index} src="${url}"></img>
-                  `;
+  var img = `<img id=${photo.id} key=${photo.index} src="${url}"></img>`;
   if (type != 'grid') {
     img += `
-                  <div class="heart" id="h${photo.id}">
-                    <span></span>
-                    <img src="./css/img/heart-icon.svg"></img>
-                  </div>
-                `;
+      <div class="heart" id="h${photo.id}">
+        <img src="./css/img/heart-icon.svg"></img>
+      </div>
+    `;
   }
   return img;
 }

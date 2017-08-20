@@ -99,11 +99,8 @@ button:hover {
   width: 2em;
   transition: width 1s;
 }
-.heart>span {
-  font-family: helvetica, sans-serif;
-  font-size: 1.3em;
-  font-weight: 700;
-  margin: 1em;
+.heart>img.liked {
+  width: 3em;
 }
 
 #loader {
